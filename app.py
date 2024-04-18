@@ -202,7 +202,7 @@ def machine_learning_modeling():
     bathrooms = st.selectbox('Number of Bathrooms', options=[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0], format_func=lambda x: f"{x:.1f}", index=1)
     property_type = st.radio('Type', data['Type'].unique())
 
-    if st.button("Predict", key='predict_button'):
+    if st.button("Predict"):
         # Load the trained model including preprocessing
         model = joblib.load('gradient_boost_regressor_model.pkl')
 
