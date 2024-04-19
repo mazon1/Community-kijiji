@@ -66,7 +66,27 @@ def exploratory_data_analysis():
 # Show the plot using Streamlit
   st.plotly_chart(fig)
 
+  st.subheader('Relationship Between Healthcare Facilities and Rental Prices in Small Community')
 
+# Create a scatter plot using Plotly Express
+  small_communities = data[data['Population'] < 10000]
+  fig = px.scatter(small_communities,
+                 x='healthcare_count',
+                 y='Price',
+                 trendline='ols',  # Add linear regression trendline
+                 labels={'Price': 'Rental Price ($)', 'healthcare_count': 'Number of Healthcare Facilities'},
+                 color_discrete_sequence=['salmon']
+                )
+
+# Update layout
+  fig.update_layout(xaxis=dict(title='Number of Healthcare Facilities'),
+                  yaxis=dict(title='Rental Price ($)'),
+                  plot_bgcolor='rgba(0,0,0,0)',
+                  paper_bgcolor='rgba(0,0,0,0)',
+                 )
+
+# Show the plot using Streamlit
+  st.plotly_chart(fig)
 
 
   # Streamlit app
@@ -204,7 +224,7 @@ def machine_learning_modeling():
     bathrooms = st.selectbox('Number of Bathrooms', options=[0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0], format_func=lambda x: f"{x:.1f}", index=1)
     property_type = st.radio('Type', data['Type'].unique())
 
-    if st.button("Predict"):
+    if st.button("Predict", key='predict_button'):
         # Load the trained model including preprocessing
         model = joblib.load('gradient_boost_regressor_model.pkl')
 
@@ -221,7 +241,11 @@ def machine_learning_modeling():
         prediction = model.predict(input_df)
 
         # Display the prediction
-        st.success(f"Predicted Rental Price: ${prediction[0]:,.2f}")
+        st.write(f"""
+        <div style="background-color:#E5F4E3; padding: 8px; border-radius: 8px;">
+            <h3 style="color:#009900;">Predicted Rental Price: ${prediction[0]:,.2f}</h3>
+        </div>
+        """, unsafe_allow_html=True)
 
     # Chat Box
     st.subheader("Have questions? Ask our Assistant!")
